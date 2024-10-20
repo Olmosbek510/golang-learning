@@ -1,5 +1,10 @@
 package main
 
 func main() {
-	arrays()
+	//arrays()
+	//workingArrayTask()
+	//slices()
+	//sliceOperator()
+	//buildInFunctionsSlices()
+	minCount()
 }
