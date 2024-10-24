@@ -1,4 +1,4 @@
-package main
+package basics
 
 import (
 	"fmt"
@@ -164,4 +164,24 @@ func minCount() {
 		}
 	}
 	fmt.Println(count)
+}
+
+func ignoreDigit() {
+	var num, miss string
+	fmt.Scan(&num, &miss)
+
+	// Ensure that 'miss' is a single character
+	if len(miss) != 1 {
+		fmt.Println("Error: 'miss' should be a single character")
+		return
+	}
+
+	res := ""
+	for i := 0; i < len(num); i++ {
+		if string(num[i]) == miss {
+			continue
+		}
+		res += string(num[i])
+	}
+	fmt.Println(res)
 }
