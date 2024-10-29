@@ -16,5 +16,8 @@ func isExists() {
 		fmt.Printf("Key: %s, Value: %v\n", key, val)
 	}
 
+	val, ok := fruits["apple"]
+	fmt.Println(ok)
+	fmt.Println(val)
 	fmt.Println(len(fruits))
 }
