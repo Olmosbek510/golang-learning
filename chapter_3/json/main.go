@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 )
@@ -22,7 +23,7 @@ type user struct {
 }
 
 func main() {
-	customizingJsonFields()
+	lastTask()
 }
 
 //	Marshalling data(converting to json)
@@ -176,4 +177,26 @@ func task() {
 	fmt.Println(string(s))
 }
 
-//	struct tags in golang
+type Report struct {
+	GlobalId uint64 `json:"global_id"`
+}
+
+func lastTask() {
+	path := "/Users/orazboyevolmosbek/Downloads/data-20190514T0100.json"
+	file, err := os.Open(path)
+	if err != nil {
+		fmt.Println("Error while opening file")
+		return
+	}
+	var reports []Report
+	data, _ := io.ReadAll(file)
+	if err := json.Unmarshal(data, &reports); err != nil {
+		fmt.Println("Error")
+		return
+	}
+	var sum uint64 = 0
+	for _, elem := range reports {
+		sum += elem.GlobalId
+	}
+	fmt.Println(sum)
+}
