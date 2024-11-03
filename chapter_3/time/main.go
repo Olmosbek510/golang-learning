@@ -1,13 +1,16 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"math"
+	"os"
+	"strings"
 	"time"
 )
 
 func main() {
-	convertingTimeToString()
+	durationExplanation()
 	//practicalExamples()
 }
 
@@ -200,4 +203,76 @@ func methodsForChangeTimeStructure() {
 		Note that negative values can also be used in the Add and AddDate methods,
 		which allows you to no only 'add' time (as can bee seen from the method names), but also 'subtract' it.
 	*/
+}
+
+func task() {
+	var timeString string
+	_, err := fmt.Scan(&timeString)
+	if err != nil {
+		return
+	}
+	parsedTime, _ := time.Parse("2006-01-02T15:04:05-07:00", timeString)
+	fmt.Println(parsedTime.Format(time.UnixDate))
+}
+
+func task1() {
+	bf := bufio.NewReader(os.Stdin)
+	stringTime, _ := bf.ReadString('\n')
+	stringTime = strings.TrimSuffix(stringTime, "\n")
+	layout := "2006-01-02 15:04:05"
+	timeVal, _ := time.Parse(layout, stringTime)
+	testTime := time.Date(timeVal.Year(), timeVal.Month(), timeVal.Day(), 13, timeVal.Minute(), timeVal.Second(), timeVal.Nanosecond(), time.Local)
+	if timeVal.After(testTime) {
+		timeVal = timeVal.AddDate(0, 0, 1)
+	}
+	fmt.Println(timeVal.Format(layout))
+}
+
+const now = 1589570165
+
+// type Duration explanation
+func durationExplanation() {
+	now := time.Now()
+	past := now.AddDate(0, 0, -1)
+	future := now.AddDate(0, 0, 1)
+
+	// func Since(t Time) Duration
+	// calculates the period between the current moment and a given time in the past
+	fmt.Println(time.Since(past).Round(time.Second))
+
+	// func Until(t Time) Duration
+	// calculates the period between the current moment and a given time in the future
+	fmt.Println(time.Until(future).Round(time.Second))
+
+	// func ParseDuration(s string) (Duration, error)
+	// converts the string to Duration using annotations:
+	// "ns" - nanoseconds,
+	// "us" - microseconds,
+	// "ms" - milliseconds,
+	// "s" - seconds,
+	// "m" - minutes,
+	// "h" - hours.
+
+	dur, err := time.ParseDuration("1h12m3s90ns")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(dur.Round(time.Hour).Hours())
+}
+
+func task2() {
+	bf := bufio.NewReader(os.Stdin)
+	strTime, _ := bf.ReadString('\n')
+	layout := "02.01.2006 15:04:05"
+	strings.TrimPrefix(strTime, "\n")
+	sliceTimes := strings.Split(strTime, ",")
+	smaller, _ := time.Parse(layout, strings.TrimSpace(sliceTimes[0]))
+	larger, _ := time.Parse(layout, strings.TrimSpace(sliceTimes[1]))
+
+	if smaller.After(larger) {
+		temp := smaller
+		smaller = larger
+		larger = temp
+	}
+	fmt.Println(larger.Sub(smaller))
 }
